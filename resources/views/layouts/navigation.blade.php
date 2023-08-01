@@ -102,7 +102,6 @@
 
 @php
     $permissions = getAllPermissions();
-    // array_key_exists("admin.new-agenfft",$fetchRole)
 @endphp
 <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">

@@ -88,7 +88,8 @@ class TicketController extends Controller
     public function show(string $id)
     {
         $ticket = Ticket::find($id);
-        return view('ticket.show-ticket')->with(compact('ticket'));
+        // $users = Auth::user()->role->pluck('id')->toArray();
+        return view('ticket.show-ticket')->with(compact('ticket',));
     }
 
     /**
@@ -96,10 +97,11 @@ class TicketController extends Controller
      */
     public function edit(string $id)
     {
+        $users = Auth::user()->role->pluck('id')->toArray();
         $labels = Label::all();
         $categories = Category::all();
         $ticket = Ticket::find($id);
-        $data = compact('ticket', 'labels', 'categories');
+        $data = compact('ticket', 'labels', 'categories', 'users');
         return view('ticket.create-new-ticket')->with($data);
     }
 

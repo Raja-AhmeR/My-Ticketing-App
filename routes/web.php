@@ -69,7 +69,7 @@ Route::middleware(['auth', 'check-user'])->prefix('admin')->name('admin.')->grou
 });
 
 // Route for Ticket
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'check-user'])->group(function() {
     Route::get('/ticket/view-ticket', [TicketController::class, 'index'])->name('view-ticket');
     Route::get('/ticket/create-ticket', [TicketController::class, 'create'])->name('create-ticket');
     Route::post('/ticket/create-ticket', [TicketController::class, 'store'])->name('store-ticket');
@@ -82,3 +82,6 @@ Route::middleware(['auth'])->group(function() {
 
 });
 
+Route::get('/access', function() {
+    return view('access');
+});

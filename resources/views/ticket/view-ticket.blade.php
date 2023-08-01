@@ -20,17 +20,20 @@
                         <h3 class="text-center">Tickets</h3>
                     </div>
                     <div class="card-body">
+                        @php
+                            $permissions = getAllPermissions();
+                        @endphp
                         <!-- Table with stripped rows -->
-                        @if ($users[0] != '2')
+                        @if (array_key_exists('create-ticket', $permissions))
                             <div class="row">
-                                <div class="m-2">
+                                <div class="mt-3 ml-2 mr-2">
                                     <a href="{{ route('create-ticket') }}" class="float-end"><button
                                             class="btn btn-sm btn-primary"><i class="fa-solid fa-plus"
                                                 aria-hidden="true"></i>&nbsp;Create</button></a>
                                 </div>
                             </div>
                         @endif
-                        <div class="row">
+                        <div class="row mt-3 p-0">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover text-center">
                                     <!-- class="datatable" -->
@@ -43,8 +46,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($tickets as $key => $ticket)
-                                    {{-- {{dd(is_null($ticket->assigned_to))}}
+                                        @foreach ($tickets as $key => $ticket)
+                                            {{-- {{dd(is_null($ticket->assigned_to))}}
                                         @if ($users[0] == '2' && $ticket->assigned_to == 'null')
                                             {!! $message !!}
                                         @endif --}}
@@ -90,22 +93,26 @@
 
                                                                 <!-- Modal body -->
                                                                 <div class="modal-body">
-                                                                    <div class="AJAX_message_{{$ticket->id}}"></div>
+                                                                    <div class="AJAX_message_{{ $ticket->id }}"></div>
                                                                     <div class="row">
                                                                         @if ($users[0] == '1')
                                                                             <div class="mr-3">
-                                                                                <select id="assignToAgent_{{$ticket->id}}"
-                                                                                    onchange="assignTo({{$ticket->id}})"
-                                                                                    class="dropdown border rounded float-end myAgent_{{$ticket->id}}">
-                                                                                    <option class="dropdown-item" selected value="Assign To">
+                                                                                <select
+                                                                                    id="assignToAgent_{{ $ticket->id }}"
+                                                                                    onchange="assignTo({{ $ticket->id }})"
+                                                                                    class="dropdown border rounded mb-3 float-end myAgent_{{ $ticket->id }}">
+                                                                                    <option class="dropdown-item"
+                                                                                        value="Assign To">
                                                                                         Assign To</option>
                                                                                     @foreach ($agents as $agent)
                                                                                         <option class="dropdown-item"
                                                                                             {{-- name="assignToAgent" --}}
                                                                                             {{-- id="assignToAgentb_{{$agent->id}}" --}}
                                                                                             value="{{ $agent->id }}"
-                                                                                            {{-- onclick="assignTo({{$agent->id}})" --}}
-                                                                                            >
+                                                                                            {{
+                                                                                            isset($ticket->assigned_to) &&  $ticket->assigned_to == $agent->id ? 'selected' : null
+                                                                                            }}
+                                                                                            {{-- onclick="assignTo({{$agent->id}})" --}}>
                                                                                             {{ $agent->name }}
                                                                                         </option>
                                                                                     @endforeach
@@ -116,6 +123,12 @@
                                                                     <div class="row table-responsive m-1">
                                                                         <table
                                                                             class="table table-striped table-bordered table-hover text-center">
+                                                                            {{-- @if ($users[0] == '1' && $ticket->assigned_to != null)
+                                                                                <tr>
+                                                                                    <th scope="col">Assigned To</th>
+                                                                                    <th> {{ $ticket->assignedToAgent->name }} </th>
+                                                                                </tr>
+                                                                            @endif --}}
                                                                             <tr>
                                                                                 <th scope="col">Name</th>
                                                                                 <td>{{ $ticket->name }}</td>
@@ -167,32 +180,31 @@
             </div>
         </div>
     </section>
-
-
 @endsection
 
 
 @section('scripts')
-<script>
-    // console.log(assignToAgent());
+    <script>
+        // console.log(assignToAgent());
 
-    const assignTo = (ticketId) => {   // Get Ticket Id and Use it to extract agent id from dropdown list
-        // console.log(agent);
-        // $('.myagent').val();
-        var getAgent = $(`.myAgent_${ticketId}`).val(); // Getting agent id
-        // console.log(getAgent);
-        $.ajax({
-            url: '{{ route("assign-to-agent") }}',
-            method: 'POST',
-            data: {
-                '_token': "{{ csrf_token() }}",
-                'ticketId': ticketId,
-                'getAgent': getAgent
-            },
-            success: function (result) {
-                $(`.AJAX_message_${result[0]}`).html(result[1]); // Getting data from controller and seprate it accordingly
-            }
-        });
-    }
-</script>
+        const assignTo = (ticketId) => { // Get Ticket Id and Use it to extract agent id from dropdown list
+            // console.log(agent);
+            // $('.myagent').val();
+            var getAgent = $(`.myAgent_${ticketId}`).val(); // Getting agent id
+            // console.log(getAgent);
+            $.ajax({
+                url: '{{ route('assign-to-agent') }}',
+                method: 'POST',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'ticketId': ticketId,
+                    'getAgent': getAgent
+                },
+                success: function(result) {
+                    $(`.AJAX_message_${result[0]}`).html(result[
+                    1]); // Getting data from controller and seprate it accordingly
+                }
+            });
+        }
+    </script>
 @endsection

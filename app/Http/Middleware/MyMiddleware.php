@@ -20,13 +20,33 @@ class MyMiddleware
         if (Auth::check()) {
             $roleArray = Auth::user()->role->pluck('id')->toArray();
 
+            $permissions = getAllPermissions();
+            // dd(array_key_exists('create-ticket', $permissions));
+
             if ($roleArray[0] == 1) {
                 return $next($request);
-            } elseif ($roleArray[0] == 2) {
-                
-                return redirect(route('view-ticket'));
+            }
+            elseif ($roleArray[0] == 2) {
+                if (array_key_exists('view-ticket', $permissions)) {
+                    // return redirect(route('view-ticket'));
+                    return $next($request);
+                }
+                elseif (array_key_exists('create-ticket', $permissions)) {
+                    // return redirect(route('create-ticket'));
+                    return $next($request);
+                }
+                else {
+                    // dd(!array_key_exists('view-ticket', $permissions));
+                    return redirect('access');
+                }
             } elseif ($roleArray[0] == 3) {
-                return redirect(route('view-ticket'));
+                if (array_key_exists('view-ticket', $permissions)) {
+                    return $next($request);
+                }
+                elseif (array_key_exists('create-ticket', $permissions)) {
+                    return $next($request);
+                }
+                return redirect('access');
             }
         } else {
             return redirect('/login');
@@ -35,6 +55,6 @@ class MyMiddleware
         if ($request->input('admin')) {
             return view('admin.new-agent');
         }
-        return $next($request);
+
     }
 }

@@ -14,7 +14,5 @@ function getAllPermissions() {
 }
 
 function getRoleChecked ($role) {
-
     return $role->permissions->pluck('id','id')->toArray();
-
 }

@@ -14,41 +14,113 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            'admin.new-agent',
-            'admin.create-agent',
-            'admin.store-agent',
-            'admin.delete-agent',
-            'view-ticket',
-            'create-ticket',
-            'store-ticket',
-            'show-ticket',
-            'edit-ticket',
-            'update-ticket',
-            'delete-ticket',
-            'assign-to-agent',
-            'ticket-log',
-            'admin.view-category',
-            'admin.create-category',
-            'admin.store-category',
-            'admin.edit-category',
-            'admin.update-category',
-            'admin.delete-category',
-            'admin.view-label',
-            'admin.create-label',
-            'admin.store-label',
-            'admin.edit-label',
-            'admin.update-label',
-            'admin.delete-label',
-            'admin.role-view',
-            'admin.permission-view',
-            'admin.update-permission'
+            [
+                'name' => 'admin.new-agent',
+                'view_proper_name' => 'Create New Agent'
+            ], [
+                'name' => 'admin.create-agent',
+                'view_proper_name' => 'New Agent Form',
+
+            ], [
+                'name' => 'admin.store-agent',
+                'view_proper_name' => 'Store Agent',
+            ], [
+                'name' => 'admin.delete-agent',
+                'view_proper_name' => 'Delete Agent',
+            ], [
+                'name' => 'view-ticket',
+                'view_proper_name' => 'View Ticket',
+            ], [
+                'name' => 'create-ticket',
+                'view_proper_name' => 'Create New Ticket',
+            ], [
+                'name' => 'store-ticket',
+                'view_proper_name' => 'Store Ticket',
+            ], [
+                'name' => 'show-ticket',
+                'view_proper_name' => 'Show Individual Ticket',
+            ], [
+                'name' => 'edit-ticket',
+                'view_proper_name' => 'Edit Ticket',
+            ], [
+                'name' => 'update-ticket',
+                'view_proper_name' => 'Update Ticket',
+            ], [
+                'name' => 'delete-ticket',
+                'view_proper_name' => 'Delete Ticket',
+            ], [
+                'name' => 'assign-to-agent',
+                'view_proper_name' => 'Assign Ticket To Agent',
+            ], [
+                'name' => 'ticket-log',
+                'view_proper_name' => 'View Ticket Log',
+            ], [
+                'name' => 'admin.view-category',
+                'view_proper_name' => 'View Category',
+            ], [
+                'name' => 'admin.create-category',
+                'view_proper_name' => 'Create New Category',
+            ], [
+                'name' => 'admin.store-category',
+                'view_proper_name' => 'Store Category',
+            ], [
+                'name' => 'admin.edit-category',
+                'view_proper_name' => 'Edit Category',
+            ], [
+                'name' => 'admin.update-category',
+                'view_proper_name' => 'Update Category',
+            ], [
+                'name' => 'admin.delete-category',
+                'view_proper_name' => 'Delete Category',
+            ], [
+                'name' => 'admin.view-label',
+                'view_proper_name' => 'View Label',
+            ], [
+                'name' => 'admin.create-label',
+                'view_proper_name' => 'Create New Label',
+            ], [
+                'name' => 'admin.store-label',
+                'view_proper_name' => 'Store Label',
+            ], [
+                'name' => 'admin.edit-label',
+                'view_proper_name' => 'Edit Label',
+            ], [
+                'name' => 'admin.update-label',
+                'view_proper_name' => 'Update Label',
+            ], [
+                'name' => 'admin.delete-label',
+                'view_proper_name' => 'Delete Label',
+            ], [
+                'name' => 'admin.role-view',
+                'view_proper_name' => 'View Role',
+            ], [
+                'name' => 'admin.permission-view',
+                'view_proper_name' => 'View Permission',
+            ], [
+                'name' => 'admin.update-permission',
+                'view_proper_name' => 'Update Permission'
+            ]
         ];
+
+
         foreach ($permissions as $permission) {
-            $check = Permission::where('name', $permission)->first();
+            $check = Permission::where('name', $permission['name'])->first();
             if (!isset($check)) {
-                Permission::create(['name' => $permission]);
+                Permission::create([
+                    'name' => $permission['name'],
+                    'view_proper_name' => $permission['view_proper_name']
+                ]);
             }
         }
+
+        // foreach ($properNames as $names) {
+        //     $check = Permission::where('view_proper_name', $names)->first();
+        //     if (!isset($check)) {
+        //         Permission::create([
+        //             'view_proper_name' => $names
+        //         ]);
+        //     }
+        // }
 
 
 

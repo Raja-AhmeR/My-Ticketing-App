@@ -37,7 +37,7 @@
                                     @foreach ($permissions as $key => $permission)
                                         <tr>
                                             <th>{{ $key + 1 }}</th>
-                                            <td>{{ $permission->name }}</td>
+                                            <td>{{ $permission->view_proper_name }}</td>
                                             @foreach ($roles as $key => $role)
                                                 <td class="text-capitalize">
                                                     <input type="checkbox" class="form-control rounded"
